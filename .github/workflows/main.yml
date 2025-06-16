@@ -13,8 +13,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     name: Run Tests
+
     outputs:
-      tests_passed: ${{ steps.run_tests.outputs.result }}
+      tests_passed: ${{ steps.set-output.outputs.result }}
 
     steps:
       - name: Checkout repository
@@ -37,7 +38,12 @@ jobs:
         continue-on-error: true
         run: |
           pytest --tb=short -q --disable-warnings
-          echo "result=$?" >> $GITHUB_OUTPUT
+          echo "TEST_EXIT_CODE=$?" >> $GITHUB_ENV
+
+      - name: Set test result output
+        id: set-output
+        run: |
+          echo "result=${TEST_EXIT_CODE:-1}" >> $GITHUB_OUTPUT
 
   handle_failure:
     needs: test
@@ -60,10 +66,13 @@ jobs:
           git checkout -b $branch_name
           git push origin $branch_name
 
-      - name: Revert commit
+      - name: Revert last commit (excluding workflows)
         run: |
           git checkout dev
-          git revert --no-edit HEAD
+          git revert --no-commit HEAD
+          git restore --staged .github/workflows/*
+          git checkout -- .github/workflows/*
+          git commit -m "Revert last commit (excluding workflows)"
           git push origin dev
 
   handle_success:
