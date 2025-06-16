@@ -37,11 +37,12 @@ jobs:
         continue-on-error: true
         run: |
           pytest --tb=short -q --disable-warnings
-          echo "result=$?" >> $GITHUB_OUTPUT
+          exit_code=$?
+          echo "result=$exit_code" >> $GITHUB_OUTPUT
 
   handle_failure:
     needs: test
-    if: ${{ needs.test.outputs.tests_passed != '0' }}
+    if: ${{ fromJSON(needs.test.outputs.tests_passed) != 0 }}
     runs-on: ubuntu-latest
     name: Handle Test Failure
 
@@ -68,7 +69,7 @@ jobs:
 
   handle_success:
     needs: test
-    if: ${{ needs.test.outputs.tests_passed == '0' }}
+    if: ${{ fromJSON(needs.test.outputs.tests_passed) == 0 }}
     runs-on: ubuntu-latest
     name: Merge to Main
 
