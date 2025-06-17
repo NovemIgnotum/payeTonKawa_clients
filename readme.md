@@ -1,6 +1,6 @@
 # payeTonKawa_clients
 
-Projet Python utilisant [FastAPI](https://fastapi.tiangolo.com/) pour créer une API web performante.
+Projet Python utilisant [FastAPI](https://fastapi.tiangolo.com/) pour créer une API web performante
 
 ## Installation
 
