@@ -111,9 +111,5 @@ jobs:
           args: |
             📢 Nouveau push sur **${{ github.repository }}** par **${{ github.actor }}**.
             ✅ Tests réussis : ${{ needs.test.outputs.tests_passed == '0' }}
-            🌱 Branche de développement : `dev`
-            🌳 Branche principale : `main`
             🧪 État du push : ${{ needs.test.outputs.tests_passed == '0' && 'Succès' || 'Échec' }}
             🔁 Branche de notification : `${{ github.ref_name }}`
-            🔗 [Voir le dépôt](https://github.com/${{ github.repository }})
-            🔗 [Voir le commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
