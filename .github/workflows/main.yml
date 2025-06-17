@@ -103,21 +103,17 @@ jobs:
     name: Notify Discord
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       - name: Notify Discord
         uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
           args: |
-            Nouveau push sur ${{ github.repository }} par ${{ github.actor }}.
-            Tests réussis : ${{ needs.test.outputs.tests_passed == '0' }}
-            Branche de développement : dev
-            Branche principale : main
-            État du push : ${{ needs.test.outputs.tests_passed == '0' && 'Succès' || 'Échec' }}
-            Branche de gestion des échecs : ${{ needs.handle_failure.outputs.branch_name || 'N/A' }}
-            Branche de gestion des succès : ${{ needs.handle_success.outputs.branch_name || 'N/A' }}
-            Branche de notification : ${{ github.ref }}
-            Lien vers le dépôt : ${{ github.repository }}
-            Lien vers le commit : ${{ github.event.head_commit.url }}
+            📢 Nouveau push sur **${{ github.repository }}** par **${{ github.actor }}**.
+            ✅ Tests réussis : ${{ needs.test.outputs.tests_passed == '0' }}
+            🌱 Branche de développement : `dev`
+            🌳 Branche principale : `main`
+            🧪 État du push : ${{ needs.test.outputs.tests_passed == '0' && 'Succès' || 'Échec' }}
+            🔁 Branche de notification : `${{ github.ref_name }}`
+            🔗 [Voir le dépôt](https://github.com/${{ github.repository }})
+            🔗 [Voir le commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
