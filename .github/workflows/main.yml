@@ -97,6 +97,7 @@ jobs:
           git push origin main
 
   notify:
+    if: always()
     needs: [handle_failure, handle_success]
     runs-on: ubuntu-latest
     name: Notify Discord
