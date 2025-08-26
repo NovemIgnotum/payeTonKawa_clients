@@ -1,13 +1,17 @@
 from fastapi import FastAPI
-from routes import client, product, order
+from sqlalchemy.exc import OperationalError
+from database.session import engine
+from routes import products
 
 app = FastAPI()
 
-# Inclusion des routes avec préfixes
-app.include_router(client.router, prefix="/clients", tags=["Clients"])
-app.include_router(product.router, prefix="/products", tags=["Products"])
-app.include_router(order.router, prefix="/orders", tags=["Orders"])
 
 @app.get("/")
-async def root():
-    return {"message": "Bienvenue sur l'API de PayeTonKawa"}
+def read_root():
+    try:
+        with engine.connect() as connection:
+            return {"message": "Connexion à la base de données réussie !"}
+    except OperationalError as e:
+        return {"error": f"Erreur de connexion à la base de données : {e}"}
+
+app.include_router(products.router, prefix="/clients", tags=["Clients"])
